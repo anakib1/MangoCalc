@@ -52,12 +52,22 @@ expr:    '(' expr ')'
          |
          expr '/' expr
          {
-           $$ = $1 / $3;
+           if ($3 == 0) {
+             fprintf(stderr, "Semantic error: Division by zero\n");
+             yyerrok;
+           } else {
+             $$ = $1 / $3;
+           }
          }
          |
          expr '%' expr
          {
-           $$ = $1 % $3;
+           if ($3 == 0) {
+             fprintf(stderr, "Semantic error: Modulo by zero\n");
+             yyerrok;
+           } else {
+             $$ = $1 % $3;
+           }
          }
          |
          expr '+' expr
